@@ -19,11 +19,11 @@
 </head>
 <body>
   <div id="weather-app">
-    <div class="weather-card">
-      <div id="weather-icon"><i class="fas fa-spinner fa-spin"></i></div>
-      <h1 id="temperature">Loading...</h1>
-      <p id="conditions">Fetching weather details...</p>
+    <div id="weather-icon" class="weather-shadow">
+      <i class="fas fa-spinner fa-spin"></i>
     </div>
+    <h1 id="temperature" class="weather-shadow">Loading...</h1>
+    <p id="conditions" class="weather-shadow">Fetching weather details...</p>
     <div id="fallback" style="display: none;">
       <p>Location not detected. Please enter your ZIP code:</p>
       <input type="text" id="zip-code" placeholder="Enter ZIP code" maxlength="5">
