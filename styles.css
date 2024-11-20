@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  color: #fff;
+}
+
+#weather-app {
+  text-align: center;
+}
+
+.weather-card {
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#weather-icon {
+  font-size: 64px;
+  margin-bottom: 10px;
+}
+
+#temperature {
+  font-size: 48px;
+  margin: 0;
+}
+
+#conditions {
+  font-size: 20px;
+  margin: 10px 0 0;
+}
