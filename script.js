@@ -32,6 +32,11 @@ function fetchWeather(apiUrl) {
     });
 }
 
+// Prompt for ZIP code if location not detected
+function promptForZipCode() {
+  fallback.style.display = 'block';
+}
+
 // Try geolocation first, fallback to ZIP code
 function getWeather() {
   navigator.geolocation.getCurrentPosition(
@@ -41,8 +46,8 @@ function getWeather() {
       fetchWeather(apiUrl);
     },
     (error) => {
-      fallback.style.display = 'block';
-      console.error(error);
+      console.error("Geolocation error: ", error.message);
+      promptForZipCode();
     }
   );
 }
