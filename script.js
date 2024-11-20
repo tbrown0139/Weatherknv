@@ -1,6 +1,9 @@
 const weatherIcon = document.getElementById('weather-icon');
 const temperature = document.getElementById('temperature');
 const conditions = document.getElementById('conditions');
+const fallback = document.getElementById('fallback');
+const zipCodeInput = document.getElementById('zip-code');
+const fetchWeatherButton = document.getElementById('fetch-weather');
 
 // Helper function to set weather icon based on condition
 function setWeatherIcon(condition) {
@@ -12,34 +15,49 @@ function setWeatherIcon(condition) {
   return 'fas fa-smog';
 }
 
-// Fetch weather data using wttr.in API
-function fetchWeather() {
+// Fetch weather data from wttr.in
+function fetchWeather(apiUrl) {
+  fetch(apiUrl)
+    .then((response) => response.text())
+    .then((data) => {
+      const [condition, temp] = data.split('|');
+      weatherIcon.innerHTML = `<i class="${setWeatherIcon(condition.toLowerCase())}"></i>`;
+      temperature.textContent = temp.trim();
+      conditions.textContent = condition.trim();
+    })
+    .catch((error) => {
+      temperature.textContent = 'Error';
+      conditions.textContent = 'Unable to fetch weather';
+      console.error(error);
+    });
+}
+
+// Try geolocation first, fallback to ZIP code
+function getWeather() {
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const { latitude, longitude } = position.coords;
       const apiUrl = `https://wttr.in/${latitude},${longitude}?format=%C|%t`;
-
-      fetch(apiUrl)
-        .then((response) => response.text())
-        .then((data) => {
-          const [condition, temp] = data.split('|');
-          weatherIcon.innerHTML = `<i class="${setWeatherIcon(condition.toLowerCase())}"></i>`;
-          temperature.textContent = temp.trim();
-          conditions.textContent = condition.trim();
-        })
-        .catch((error) => {
-          temperature.textContent = 'Error';
-          conditions.textContent = 'Unable to fetch weather';
-          console.error(error);
-        });
+      fetchWeather(apiUrl);
     },
     (error) => {
-      temperature.textContent = 'Error';
-      conditions.textContent = 'Location not shared';
+      fallback.style.display = 'block';
       console.error(error);
     }
   );
 }
 
-// Fetch weather on load
-fetchWeather();
+// Handle ZIP code fallback
+fetchWeatherButton.addEventListener('click', () => {
+  const zipCode = zipCodeInput.value.trim();
+  if (zipCode.length === 5 && !isNaN(zipCode)) {
+    const apiUrl = `https://wttr.in/${zipCode}?format=%C|%t`;
+    fetchWeather(apiUrl);
+    fallback.style.display = 'none';
+  } else {
+    alert('Please enter a valid ZIP code.');
+  }
+});
+
+// Load weather on startup
+getWeather();
